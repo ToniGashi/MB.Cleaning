@@ -27,63 +27,117 @@ export default function QuoteEstimator({
   const [frequency, setFrequency] = useState("one-time");
   const [deepClean, setDeepClean] = useState(false);
   const [windowCleaning, setWindowCleaning] = useState(false);
-  const [carpetCleaning, setCarpetCleaning] = useState(false);
+  const [garageCleaning, setGarageCleaning] = useState(false);
   const [complexity, setComplexity] = useState("medium");
-  const [debrisRemoval, setDebrisRemoval] = useState(false);
   const [notes, setNotes] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const estimate = useMemo(() => {
     const size = typeof propertySize === "number" ? propertySize : 0;
     if (service === "residential") {
-      // Charleston area residential cleaning rates
-      // Base rate: $0.12-$0.15 per sq ft for standard cleaning
-      const basePerSqFt = 0.13;
-      let price = size * basePerSqFt;
+      // Charleston area residential cleaning rates (2025 market rates)
+      // Base rate calculation: $0.10-$0.18 per sq ft for standard cleaning
+      // Smaller homes have higher per sq ft rate, larger homes have lower
+      const basePerSqFt = size < 1000 ? 0.18 : size < 2000 ? 0.14 : size < 3000 ? 0.12 : 0.10;
+      let basePrice = size * basePerSqFt;
 
-      // Additional charges for bedrooms and bathrooms (more detailed cleaning)
-      price += (typeof bedrooms === "number" ? bedrooms : 0) * 25;
-      price += (typeof bathrooms === "number" ? bathrooms : 0) * 35;
+      // Bedroom and bathroom add-ons (detailed room cleaning)
+      // Bedrooms: $20-$30 each, Bathrooms: $30-$45 each in Charleston
+      const bedroomCount = typeof bedrooms === "number" ? bedrooms : 0;
+      const bathroomCount = typeof bathrooms === "number" ? bathrooms : 0;
+      basePrice += bedroomCount * 25;
+      basePrice += bathroomCount * 38;
 
-      // Deep clean adds 40-50% more time and effort
-      if (deepClean) price *= 1.45;
-
-      // Window cleaning: $150-$250 for average home in Charleston
-      if (windowCleaning) price += 180;
-
-      // Carpet cleaning: $0.30-$0.50 per sq ft in Charleston
-      if (carpetCleaning) {
-        const carpetArea = size * 0.6; // Estimate 60% of home has carpet
-        price += carpetArea * 0.4;
+      // Deep clean multiplier (applies to base cleaning only, not extras)
+      // Deep clean: 50-70% more intensive work in Charleston
+      if (deepClean) {
+        basePrice *= 1.6;
       }
+
+      // Additional services (priced separately, not affected by deep clean multiplier)
+      let extras = 0;
+      
+      // Window cleaning: $0.50-$1.00 per window or $150-$300 flat for average home
+      // Estimate ~15-20 windows for average Charleston home
+      if (windowCleaning) {
+        extras += Math.max(175, size * 0.12); // $175 minimum or $0.12/sq ft
+      }
+
+      // Garage cleaning: $150-$400 in Charleston (size and clutter dependent)
+      if (garageCleaning) {
+        // Estimate garage size as 15-20% of home size, or minimum $175
+        const estimatedGarageSize = Math.max(400, size * 0.18);
+        extras += Math.max(175, estimatedGarageSize * 0.35);
+      }
+
+      // Combine base and extras
+      let totalPrice = basePrice + extras;
 
       // Frequency discounts (recurring customers get better rates)
-      if (frequency === "weekly") price *= 0.8; // 20% discount
-      else if (frequency === "biweekly") price *= 0.85; // 15% discount
-      else if (frequency === "monthly") price *= 0.9; // 10% discount
+      // Applied to total price
+      if (frequency === "weekly") totalPrice *= 0.75; // 25% discount for weekly
+      else if (frequency === "biweekly") totalPrice *= 0.82; // 18% discount for bi-weekly
+      else if (frequency === "monthly") totalPrice *= 0.88; // 12% discount for monthly
 
-      // Minimum service charge for Charleston area
-      const min = Math.max(120, price);
-      return Math.round(min);
+      // Minimum service charge for Charleston area (one-time cleaning)
+      // Weekly/monthly recurring can go lower due to volume
+      const minCharge = frequency === "one-time" ? 125 : 100;
+      const finalPrice = Math.max(minCharge, totalPrice);
+      
+      // Calculate price per sq ft for display
+      const pricePerSqFt = size > 0 ? finalPrice / size : 0;
+      
+      return {
+        total: Math.round(finalPrice),
+        perSqFt: pricePerSqFt,
+        basePerSqFt: basePerSqFt
+      };
     } else {
-      // Charleston area post-construction cleanup rates
-      // Base rate: $0.18-$0.25 per sq ft for standard post-construction cleanup
-      const basePerSqFt = 0.22;
-      let price = size * basePerSqFt;
-
-      // Complexity multiplier (construction cleanup varies significantly)
-      if (complexity === "low") price *= 0.9; // Light cleanup, mostly dust
-      else if (complexity === "medium") price *= 1.0; // Standard cleanup
-      else if (complexity === "high") price *= 1.5; // Heavy debris, paint, construction materials
-
-      // Debris removal: $0.08-$0.12 per sq ft additional in Charleston
-      if (debrisRemoval) {
-        price += Math.max(300, size * 0.1);
+      // Charleston area post-construction cleanup rates (industry-specific 2025 rates)
+      // Construction cleaning is priced by phase and complexity
+      // Base rate varies: $0.25-$0.45 per sq ft depending on complexity
+      
+      let basePrice = 0;
+      
+      // Complexity-based base rates (industry standard for Charleston)
+      // Base price includes rough clean and final clean
+      if (complexity === "low") {
+        // Light cleanup: mostly dust, minimal debris
+        basePrice = size * 0.30;
+      } else if (complexity === "medium") {
+        // Standard cleanup: typical construction debris, paint marks
+        basePrice = size * 0.36;
+      } else {
+        // High complexity: heavy debris, paint, adhesives, construction materials
+        basePrice = size * 0.42;
       }
 
-      // Minimum for construction cleanup in Charleston area
-      const min = Math.max(350, price);
-      return Math.round(min);
+      // Additional services (priced separately)
+      // Note: Window cleaning and debris removal are included in base price
+      // Total construction cleanup price
+      let totalPrice = basePrice;
+
+      // Construction projects typically have minimums based on project size
+      // Small projects (< 5,000 sq ft): $500 minimum
+      // Medium projects (5,000-15,000 sq ft): $400 minimum  
+      // Large projects (> 15,000 sq ft): $350 minimum (volume discount)
+      let minCharge = 500;
+      if (size >= 15000) {
+        minCharge = 350;
+      } else if (size >= 5000) {
+        minCharge = 400;
+      }
+
+      const finalPrice = Math.max(minCharge, totalPrice);
+      
+      // Calculate price per sq ft for display
+      const pricePerSqFt = size > 0 ? finalPrice / size : 0;
+      
+      return {
+        total: Math.round(finalPrice),
+        perSqFt: pricePerSqFt,
+        basePerSqFt: complexity === "low" ? 0.30 : complexity === "medium" ? 0.36 : 0.42
+      };
     }
   }, [
     service,
@@ -93,31 +147,65 @@ export default function QuoteEstimator({
     frequency,
     deepClean,
     windowCleaning,
-    carpetCleaning,
+    garageCleaning,
     complexity,
-    debrisRemoval,
   ]);
+
+  function generateEmailTemplate() {
+    const size = typeof propertySize === "number" ? propertySize : 0;
+    const estimateTotal = typeof estimate === "object" ? estimate.total : estimate;
+    const estimatePerSqFt = typeof estimate === "object" ? estimate.perSqFt : 0;
+    const basePerSqFt = typeof estimate === "object" && "basePerSqFt" in estimate ? estimate.basePerSqFt : 0;
+
+    const serviceType = service === "residential" ? "Residential Cleaning" : "Post-Construction Cleaning";
+    
+    let emailBody = `Hello MB Cleaning Team,\n\n`;
+    emailBody += `I would like to request a quote for ${serviceType} services.\n\n`;
+    emailBody += `--- SERVICE DETAILS ---\n`;
+    emailBody += `Service Type: ${serviceType}\n`;
+    emailBody += `Property/Project Size: ${size.toLocaleString()} sq ft\n\n`;
+
+    if (service === "residential") {
+      emailBody += `--- RESIDENTIAL DETAILS ---\n`;
+      emailBody += `Bedrooms: ${typeof bedrooms === "number" ? bedrooms : "N/A"}\n`;
+      emailBody += `Bathrooms: ${typeof bathrooms === "number" ? bathrooms : "N/A"}\n`;
+      emailBody += `Frequency: ${frequency === "one-time" ? "One-time" : frequency === "weekly" ? "Weekly" : frequency === "biweekly" ? "Bi-weekly" : "Monthly"}\n`;
+      emailBody += `Deep Clean: ${deepClean ? "Yes" : "No"}\n`;
+      emailBody += `Window Cleaning: ${windowCleaning ? "Yes" : "No"}\n`;
+      emailBody += `Garage Cleaning: ${garageCleaning ? "Yes" : "No"}\n\n`;
+    } else {
+      emailBody += `--- CONSTRUCTION DETAILS ---\n`;
+      emailBody += `Project Complexity: ${complexity.charAt(0).toUpperCase() + complexity.slice(1)}\n\n`;
+    }
+
+    emailBody += `--- ESTIMATE ---\n`;
+    emailBody += `Estimated Total: ${formatCurrency(estimateTotal)}\n`;
+    if (estimatePerSqFt > 0) {
+      emailBody += `Price per sq ft: $${estimatePerSqFt.toFixed(2)}\n`;
+      if (service === "construction" && basePerSqFt > 0) {
+        emailBody += `Base rate per sq ft: $${basePerSqFt.toFixed(2)}\n`;
+      }
+    }
+    emailBody += `\n`;
+
+    if (notes.trim()) {
+      emailBody += `--- ADDITIONAL NOTES ---\n`;
+      emailBody += `${notes}\n\n`;
+    }
+
+    emailBody += `Please contact me to confirm this estimate and schedule a service.\n\n`;
+    emailBody += `Thank you!`;
+
+    const subject = encodeURIComponent(`Quote Request - ${serviceType} (${size.toLocaleString()} sq ft)`);
+    const body = encodeURIComponent(emailBody);
+    
+    return `mailto:info@mb.cleaning?subject=${subject}&body=${body}`;
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Placeholder: replace with real API call
-    const payload = {
-      service,
-      propertySize,
-      bedrooms: service === "residential" ? bedrooms : undefined,
-      bathrooms: service === "residential" ? bathrooms : undefined,
-      frequency: service === "residential" ? frequency : undefined,
-      deepClean: service === "residential" ? deepClean : undefined,
-      windowCleaning,
-      carpetCleaning: service === "residential" ? carpetCleaning : undefined,
-      complexity: service === "construction" ? complexity : undefined,
-      debrisRemoval: service === "construction" ? debrisRemoval : undefined,
-      notes,
-      estimate,
-    };
-
-    // Simulate submission
-    console.log("Quote request payload:", payload);
+    // Open email client with pre-filled template
+    window.location.href = generateEmailTemplate();
     setSubmitted(true);
   }
 
@@ -230,6 +318,9 @@ export default function QuoteEstimator({
                   <option value="medium">Medium</option>
                   <option value="high">High</option>
                 </select>
+                <p className="mt-2 text-xs text-slate-500">
+                  Base price includes rough clean and final clean
+                </p>
               </div>
             </div>
           )}
@@ -245,32 +336,24 @@ export default function QuoteEstimator({
                 <span className="text-slate-700">Deep Clean</span>
               </label>
             )}
-            <label className="flex items-center space-x-3 text-slate-700">
-              <input
-                type="checkbox"
-                checked={windowCleaning}
-                onChange={(e) => setWindowCleaning(e.target.checked)}
-              />
-              <span>Window Cleaning</span>
-            </label>
+            {service === "residential" && (
+              <label className="flex items-center space-x-3 text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={windowCleaning}
+                  onChange={(e) => setWindowCleaning(e.target.checked)}
+                />
+                <span>Window Cleaning</span>
+              </label>
+            )}
             {service === "residential" && (
               <label className="flex items-center space-x-3">
                 <input
                   type="checkbox"
-                  checked={carpetCleaning}
-                  onChange={(e) => setCarpetCleaning(e.target.checked)}
+                  checked={garageCleaning}
+                  onChange={(e) => setGarageCleaning(e.target.checked)}
                 />
-                <span className="text-slate-700">Carpet Cleaning</span>
-              </label>
-            )}
-            {service === "construction" && (
-              <label className="flex items-center space-x-3 text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={debrisRemoval}
-                  onChange={(e) => setDebrisRemoval(e.target.checked)}
-                />
-                <span>Debris Removal</span>
+                <span className="text-slate-700">Garage Cleaning</span>
               </label>
             )}
           </div>
@@ -306,9 +389,24 @@ export default function QuoteEstimator({
                   <div className="text-white text-sm font-semibold mb-2 uppercase tracking-wide">
                     Your Estimated Price
                   </div>
-                  <div className="text-5xl md:text-6xl font-extrabold text-white mb-3 [text-shadow:0_2px_8px_rgba(0,0,0,0.4)]">
-                    {formatCurrency(estimate)}
+                  <div className="text-5xl md:text-6xl font-extrabold text-white mb-2 [text-shadow:0_2px_8px_rgba(0,0,0,0.4)]">
+                    {formatCurrency(typeof estimate === "object" ? estimate.total : estimate)}
                   </div>
+                  {typeof estimate === "object" && (
+                    <div className="text-white/90 text-sm mb-3 font-medium">
+                      ${estimate.perSqFt.toFixed(2)} per sq ft
+                      {service === "construction" && (
+                        <>
+                          <span className="text-white/70 ml-2">
+                            (Base: ${estimate.basePerSqFt.toFixed(2)}/sq ft)
+                          </span>
+                          <div className="text-white/80 text-xs mt-1">
+                            Includes rough clean and final clean
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
                   <div className="text-white text-sm flex items-center gap-2 font-medium">
                     <svg
                       className="w-5 h-5"
@@ -362,8 +460,10 @@ export default function QuoteEstimator({
 
         {submitted && (
           <div className="mt-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-800">
-            Thanks — your request was sent. We&apos;ll follow up with a
-            confirmed quote shortly.
+            <p className="font-semibold mb-1">Email client opened!</p>
+            <p className="text-sm">
+              Your quote request has been pre-filled in your email. Please review and send to complete your request.
+            </p>
           </div>
         )}
       </div>

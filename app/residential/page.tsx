@@ -5,8 +5,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PageHero from "../components/PageHero";
 import ServiceCard from "../components/ServiceCard";
-import TestimonialCard from "../components/TestimonialCard";
-import BlogCard from "../components/BlogCard";
 import Section from "../components/Section";
 
 const services = [
@@ -35,64 +33,16 @@ const services = [
       "Interior and exterior window cleaning for crystal-clear views and natural light throughout your home.",
   },
   {
-    icon: "🧽",
-    title: "Carpet Cleaning",
+    icon: "🚗",
+    title: "Garage Cleaning",
     description:
-      "Professional steam cleaning to remove deep-seated dirt, stains, and allergens from your carpets and rugs.",
+      "Complete garage organization and cleaning service including floor sweeping, wall cleaning, and organizing storage areas to maximize your garage space.",
   },
   {
     icon: "🌿",
     title: "Eco-Friendly Options",
     description:
       "Green cleaning solutions that are safe for your family and pets while being effective against dirt and germs.",
-  },
-];
-
-const testimonials = [
-  {
-    quote:
-      "&quot;MB Cleaning has been cleaning our home for over a year now. They&apos;re reliable, thorough, and always leave our house sparkling. Highly recommend!&quot;",
-    author: "- Sarah M., Homeowner",
-  },
-  {
-    quote:
-      "&quot;The deep cleaning service was incredible! They cleaned areas I didn&apos;t even know needed attention. Our home has never looked better.&quot;",
-    author: "- Michael R., Homeowner",
-  },
-  {
-    quote:
-      "&quot;Moving was stressful, but MB Cleaning made the move-in cleaning so easy. The house was spotless when we arrived. Worth every penny!&quot;",
-    author: "- Jennifer L., Homeowner",
-  },
-];
-
-const blogPosts = [
-  {
-    category: "CLEANING TIPS",
-    categoryColor: "text-blue-600",
-    title: "10 Essential Spring Cleaning Tips for Your Home",
-    description:
-      "Discover the best strategies for a thorough spring cleaning that will make your home shine and improve your indoor air quality.",
-    href: "/residential/blog/spring-cleaning-tips",
-    linkColor: "text-blue-600 hover:text-blue-800",
-  },
-  {
-    category: "ECO-FRIENDLY",
-    categoryColor: "text-green-600",
-    title: "How to Clean Naturally Without Harsh Chemicals",
-    description:
-      "Learn about natural cleaning solutions that are safe for your family and the environment while being effective against dirt and germs.",
-    href: "/residential/blog/natural-cleaning",
-    linkColor: "text-green-600 hover:text-green-800",
-  },
-  {
-    category: "ORGANIZATION",
-    categoryColor: "text-blue-600",
-    title: "Decluttering Your Home: A Room-by-Room Guide",
-    description:
-      "Practical tips for organizing and decluttering each room in your home to create a more peaceful and manageable living space.",
-    href: "/residential/blog/decluttering-guide",
-    linkColor: "text-blue-600 hover:text-blue-800",
   },
 ];
 
@@ -131,35 +81,7 @@ export default function ResidentialPage() {
         </div>
       </Section>
 
-      <Section title="What Our Clients Say" className="bg-slate-50 py-24">
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <TestimonialCard
-              key={index}
-              quote={testimonial.quote}
-              author={testimonial.author}
-            />
-          ))}
-        </div>
-      </Section>
-
       <QuoteEstimator service="residential" />
-
-      <Section title="Cleaning Tips & Insights" className="bg-white py-24">
-        <div className="grid md:grid-cols-3 gap-8">
-          {blogPosts.map((post, index) => (
-            <BlogCard
-              key={index}
-              category={post.category}
-              categoryColor={post.categoryColor}
-              title={post.title}
-              description={post.description}
-              href={post.href}
-              linkColor={post.linkColor}
-            />
-          ))}
-        </div>
-      </Section>
 
       <Footer />
     </div>

@@ -56,7 +56,7 @@ export default function ContactPage() {
 
         {/* Service Switcher */}
         <Reveal>
-          <div className="flex justify-center mb-8 sm:mb-12">
+          <div className="flex justify-center ">
             <div className="bg-white rounded-2xl p-1 sm:p-1.5 shadow-lg border border-slate-200 inline-flex gap-1 w-full max-w-md sm:w-auto">
               <button
                 onClick={() => setService("residential")}
@@ -98,7 +98,10 @@ export default function ContactPage() {
           </Reveal>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto">
             <Reveal>
-              <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl text-center border border-slate-200">
+              <a
+                href="mailto:info@mb.cleaning"
+                className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl text-center border border-slate-200 hover:border-blue-400 hover:shadow-2xl transition-all block"
+              >
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                   <svg
                     className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600"
@@ -117,13 +120,16 @@ export default function ContactPage() {
                 <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                   Email
                 </h3>
-                <p className="text-sm sm:text-base text-slate-600">
+                <p className="text-sm sm:text-base text-slate-600 hover:text-blue-600 transition-colors">
                   info@mb.cleaning
                 </p>
-              </div>
+              </a>
             </Reveal>
             <Reveal>
-              <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl text-center border border-slate-200">
+              <a
+                href="tel:8434696373"
+                className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl text-center border border-slate-200 hover:border-green-400 hover:shadow-2xl transition-all block"
+              >
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                   <svg
                     className="w-6 h-6 sm:w-8 sm:h-8 text-green-600"
@@ -142,10 +148,10 @@ export default function ContactPage() {
                 <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                   Phone
                 </h3>
-                <p className="text-sm sm:text-base text-slate-600">
-                  (555) 123-4567
+                <p className="text-sm sm:text-base text-slate-600 hover:text-green-600 transition-colors">
+                  (843) 469-6373
                 </p>
-              </div>
+              </a>
             </Reveal>
             <Reveal>
               <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl text-center border border-slate-200 sm:col-span-2 md:col-span-1">

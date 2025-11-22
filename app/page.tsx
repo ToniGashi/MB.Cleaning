@@ -68,7 +68,7 @@ export default function Home() {
               </h1>
               <p className="hero-text text-base sm:text-lg md:text-xl text-slate-500 max-w-lg leading-relaxed mb-6 sm:mb-8">
                 The premier cleaning partner for luxury residences and
-                large-scale commercial developments in 2025.
+                large-scale commercial developments in 2026.
               </p>
               <div className="hero-text flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
                 <a
@@ -86,68 +86,97 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Column: Trusted Partners */}
+            {/* Right Column: Our Greatest Qualities */}
             <div className="relative hidden lg:block">
               <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-200">
                 <div className="text-center mb-8">
                   <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                    Trusted By
+                    Why Choose Us
                   </p>
                   <h3 className="text-2xl font-bold text-slate-900">
-                    Industry Leaders
+                    Our Greatest Qualities
                   </h3>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
-                  {/* Partner Logos */}
-                  <div className="flex items-center justify-center p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-blue-300 transition-colors">
-                    <div className="text-slate-400 font-bold text-md">
-                      American Homes For Rent
+                <div className="space-y-6">
+                  {/* Honest */}
+                  <div className="flex items-start gap-4 p-4 bg-blue-50 rounded-xl border border-blue-100 hover:border-blue-300 transition-colors">
+                    <div className="flex-shrink-0 w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-slate-900 mb-1">Honest</h4>
+                      <p className="text-sm text-slate-600">
+                        Transparent pricing and clear communication. No hidden
+                        fees or surprises.
+                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center justify-center p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-blue-300 transition-colors">
-                    <div className="text-slate-400 font-bold text-md">
-                      Center Park Homes
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-center p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-blue-300 transition-colors">
-                    <div className="text-slate-400 font-bold text-md">
-                      Eastwood
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-center p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-blue-300 transition-colors">
-                    <div className="text-slate-400 font-bold text-md">
-                      Manor House Builders
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-center p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-blue-300 transition-colors">
-                    <div className="text-slate-400 font-bold text-md">
-                      H&H Builders
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-center p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-blue-300 transition-colors">
-                    <div className="text-slate-400 font-bold text-md">
-                      Steeve Hill Builders
-                    </div>
-                  </div>
-                </div>
 
-                <div className="mt-8 pt-8 border-t border-slate-200">
-                  <div className="flex items-center justify-center gap-2 text-slate-600">
-                    <svg
-                      className="w-5 h-5 text-green-500"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-sm font-medium">
-                      10+ Trusted Partners
-                    </span>
+                  {/* Fast */}
+                  <div className="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-100 hover:border-green-300 transition-colors">
+                    <div className="flex-shrink-0 w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-slate-900 mb-1">Fast</h4>
+                      <p className="text-sm text-slate-600">
+                        24-hour turnaround available. We work efficiently
+                        without compromising quality.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Reliable */}
+                  <div className="flex items-start gap-4 p-4 bg-orange-50 rounded-xl border border-orange-100 hover:border-orange-300 transition-colors">
+                    <div className="flex-shrink-0 w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-slate-900 mb-1">
+                        Reliable
+                      </h4>
+                      <p className="text-sm text-slate-600">
+                        Consistent service you can count on. Serving Charleston
+                        since 2006.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -217,7 +246,7 @@ export default function Home() {
                   For Contractors
                 </span>
                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight drop-shadow-lg">
-                  Post-Construction
+                  Construction Cleaning
                 </h3>
                 <p className="text-sm sm:text-base text-white/95 mb-4 line-clamp-2 md:line-clamp-none drop-shadow-md font-medium">
                   OSHA-compliant rough, final, and touch-up cleaning for

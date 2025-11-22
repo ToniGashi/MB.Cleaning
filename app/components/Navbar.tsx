@@ -17,7 +17,6 @@ export default function Navbar() {
     if (pathname === "/") return "home";
     if (pathname.startsWith("/residential")) return "residential";
     if (pathname.startsWith("/construction")) return "construction";
-    if (pathname.startsWith("/blog")) return "blog";
     if (pathname.startsWith("/contact")) return "contact";
     return null;
   };
@@ -35,7 +34,6 @@ export default function Navbar() {
     { href: "/", label: "Home", page: "home" },
     { href: "/residential", label: "Residential", page: "residential" },
     { href: "/construction", label: "Construction", page: "construction" },
-    { href: "/blog", label: "Blog", page: "blog" },
   ];
 
   // Animate menu open/close with super smooth animations
